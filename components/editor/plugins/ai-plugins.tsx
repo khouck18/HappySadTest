@@ -111,7 +111,7 @@ export const aiPlugins = (tone: "happy" | "sad") => {
             : PROMPT_TEMPLATES.systemDefault;
         },
       },
-      render: { afterEditable: () => <AIMenu /> },
+      render: { afterEditable: () => <AIMenu tone={tone} /> },
     }),
   ] as const;
 };

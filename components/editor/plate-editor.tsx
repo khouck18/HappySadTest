@@ -19,7 +19,6 @@ export function PlateEditor({tone}: {tone: "happy" | "sad"}) {
         <EditorContainer>
           <Editor variant="demo" />
         </EditorContainer>
-
         <SettingsDialog />
       </Plate>
     </DndProvider>

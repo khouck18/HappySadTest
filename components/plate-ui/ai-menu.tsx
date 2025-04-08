@@ -26,7 +26,7 @@ import { AIMenuItems } from './ai-menu-items';
 import { Command, CommandList, InputCommand } from './command';
 import { Popover, PopoverAnchor, PopoverContent } from './popover';
 
-export function AIMenu() {
+export function AIMenu({tone}: {tone: "happy" | "sad"}) {
   const { api, editor } = useEditorPlugin(AIChatPlugin);
   const open = usePluginOption(AIChatPlugin, 'open');
   const mode = usePluginOption(AIChatPlugin, 'mode');
@@ -143,7 +143,7 @@ export function AIMenu() {
                 }
               }}
               onValueChange={setInput}
-              placeholder="Ask AI anything..."
+              placeholder="Enter your prompt here..."
               data-plate-focus
               autoFocus
             />
@@ -151,7 +151,7 @@ export function AIMenu() {
 
           {!isLoading && (
             <CommandList>
-              <AIMenuItems setValue={setValue} />
+              <AIMenuItems setValue={setValue} tone={tone}/>
             </CommandList>
           )}
         </Command>

@@ -1,5 +1,5 @@
 "use client";
-
+import { useEffect } from "react";
 import type { Value } from "@udecode/plate";
 
 import { withProps } from "@udecode/cn";
@@ -176,7 +176,37 @@ export const useCreateEditor = (
   } & Omit<CreatePlateEditorOptions, "plugins"> = {},
   deps: any[] = []
 ) => {
-  return usePlateEditor<Value>(
+  const editorValues = [
+    {
+      children: [{ text: tone === "happy" ? "Happy Prompt" : "Sad Prompt" }],
+      type: "h1",
+    },
+    {
+      children: [
+        { text: "Type " },
+        { bold: true, text: "/" },
+        {
+          text: ` and enter a prompt to see AI rewrite it in a ${tone} tone.`,
+        },
+      ],
+      type: ParagraphPlugin.key,
+    },
+  ];
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedInput = localStorage.getItem(`${tone}-input`);
+      editor.tf.setValue([
+        ...editorValues,
+        {
+          children: [{ text: storedInput ?? "" }],
+          type: ParagraphPlugin.key,
+        },
+      ]);
+    }
+  }, [tone]);
+
+  const editor = usePlateEditor<Value>(
     {
       override: {
         components: {
@@ -192,24 +222,11 @@ export const useCreateEditor = (
         FixedToolbarPlugin,
         FloatingToolbarPlugin,
       ],
-      value: [
-        {
-          children: [
-            { text: tone === "happy" ? "Happy Prompt" : "Sad Prompt" },
-          ],
-          type: "h1",
-        },
-        {
-          children: [
-            { text: "Type " },
-            { bold: true, text: "/" },
-            { text: ` and enter a prompt to see AI rewrite it in a ${tone} tone.` }
-          ],
-          type: ParagraphPlugin.key,
-        },
-      ],
+      value: editorValues,
       ...options,
     },
     deps
   );
+
+  return editor;
 };
